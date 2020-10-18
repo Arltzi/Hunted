@@ -11,7 +11,7 @@ public class StompAbil : MonoBehaviour
 {
     public float damageDealt;
     public ParticleSystem preFirePartSys;
-    public MeshCollider postFireMeshCol;
+    public GameObject postFireMeshCol;
     public ParticleSystem postFirePartSys;
     public Cooldown cd;
     private bool nextFrameTest;
@@ -21,7 +21,7 @@ public class StompAbil : MonoBehaviour
         cd.CoolDownCounter();
         if (nextFrameTest)
         {
-            postFireMeshCol.enabled = false;
+            postFireMeshCol.SetActive(false);
             nextFrameTest = false;
         }
         if (Input.GetKey(KeyCode.G) && cd.CoolDownCheck())
@@ -32,13 +32,9 @@ public class StompAbil : MonoBehaviour
         {
             preFirePartSys.Stop();
             postFirePartSys.Play();
-            postFireMeshCol.enabled = true;
+            postFireMeshCol.SetActive(true);
             nextFrameTest = true;
             cd.RestartCD();
         }
-    }
-    private void LateUpdate()
-    {
-        transform.rotation = Quaternion.identity;
     }
 }
