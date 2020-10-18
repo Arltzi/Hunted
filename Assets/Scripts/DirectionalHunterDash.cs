@@ -29,13 +29,14 @@ public class DirectionalHunterDash : MonoBehaviour
         cd.CoolDownCounter();
         // this short if statement is to disable the box collider after
         // 1 frame of being active
-        if(nextFrameTest){
+        if (nextFrameTest)
+        {
             postFireBoxCollider.enabled = false;
             nextFrameTest = false;
         }
-        if(Input.GetKey(KeyCode.F) && cd.CoolDownCheck())
+        if (Input.GetKey(KeyCode.F) && cd.CoolDownCheck())
         {
-            if(Physics.Raycast(hunterTf.position, hunterTf.transform.forward, out preFireRay, 
+            if (Physics.Raycast(hunterTf.position, hunterTf.transform.forward, out preFireRay,
             100, ~LayerMask.GetMask("hunter", "targets"), QueryTriggerInteraction.Ignore))
             {
                 // enable endModel & partSys
@@ -48,36 +49,37 @@ public class DirectionalHunterDash : MonoBehaviour
                 Vector3 partSysScale = sc.scale;
                 partSysScale.z = preFireRay.distance;
                 sc.scale = partSysScale;
-                // adjusting the position of the partSys so the center is halfway b/w the 
+                // adjusting the position of the partSys so the center is halfway b/w the
                 // player and the end of the ray
                 Transform tfm = preFirePartSys.transform;
-                tfm.position = (hunterTf.forward * sc.scale.z)/2 + hunterTf.position;
+                tfm.position = (hunterTf.forward * sc.scale.z) / 2 + hunterTf.position;
                 // move the endModel
-                preFireEndModel.transform.position = preFireRay.point - transform.forward*0.5f;
+                preFireEndModel.transform.position = preFireRay.point - transform.forward * 0.5f;
             }
         }
-        if(Input.GetKeyUp(KeyCode.F) && cd.CoolDownCheck())
+        if (Input.GetKeyUp(KeyCode.F) && cd.CoolDownCheck())
         {
-            if(Physics.Raycast(hunterTf.position, hunterTf.transform.forward, out preFireRay,
-            100, ~LayerMask.GetMask("hunter", "targets"), QueryTriggerInteraction.Ignore)){
-                // disable then reenable the character controller to bypass the transform 
+            if (Physics.Raycast(hunterTf.position, hunterTf.transform.forward, out preFireRay,
+            100, ~LayerMask.GetMask("hunter", "targets"), QueryTriggerInteraction.Ignore))
+            {
+                // disable then reenable the character controller to bypass the transform
                 // restrictions of the cc
                 huntercc.enabled = false;
-                hunterTf.position = preFireRay.point - transform.forward*0.5f;
+                hunterTf.position = preFireRay.point - transform.forward * 0.5f;
                 huntercc.enabled = true;
                 // set center of postFireBoxCollider at center of raycast?
-                Vector3 pfbcVec = -1 * (hunterTf.forward) * preFireRay.distance/2f;
+                Vector3 pfbcVec = -1 * (hunterTf.forward) * preFireRay.distance / 2f;
                 pfbcVec.y = huntercc.center.y;
                 pfbcVec += hunterTf.position;
                 postFireBoxCollider.transform.position = pfbcVec;
-                // set the z value of the bc.scale to the length of the vector, 
-                // set the y value of the bc.scale to huntercc.height 
+                // set the z value of the bc.scale to the length of the vector,
+                // set the y value of the bc.scale to huntercc.height
                 // gotta use the extra vector3 to get past struct limitations.
                 pfbcVec = postFireBoxCollider.size;
                 pfbcVec.y = huntercc.height;
                 pfbcVec.z = preFireRay.distance;
                 postFireBoxCollider.size = pfbcVec;
-                // enable the postFireBoxCollider before disabling it next frame to 
+                // enable the postFireBoxCollider before disabling it next frame to
                 // allow collision calculations to happen for 1 frame.
                 nextFrameTest = true;
                 postFireBoxCollider.enabled = true;
