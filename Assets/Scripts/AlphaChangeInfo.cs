@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 public class AlphaChangeInfo : MonoBehaviour
 {
     public bool isVis;
